@@ -1,5 +1,6 @@
 package;
 
+import Enemy.BlueEnemy;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionType;
 import nape.callbacks.PreListener;
@@ -26,6 +27,7 @@ class PlayState extends FlxState {
 
 	var _level:FlxNapeTilemap;
 	var _player:FlxNapeSprite;
+	var _enemy: FlxNapeSprite;
 	var _exit:FlxSprite;
 	var _scoreText:FlxText;
 	var _status:FlxText;
@@ -110,6 +112,10 @@ class PlayState extends FlxState {
 		_player.body.mass = 10;
 		_player.physicsEnabled = true;
 		add(_player);
+
+		// Add enemy
+		_enemy = new BlueEnemy(_level, _player, FlxG.width / 3, 30);
+		add(_enemy);
 
 		_scoreText = new FlxText(2, 2, 80, "SCORE: " + (_coins.countDead() * 100));
 		_scoreText.setFormat(null, 8, FlxColor.WHITE, null, NONE, FlxColor.BLACK);
