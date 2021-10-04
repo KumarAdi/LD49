@@ -29,15 +29,8 @@ import flixel.addons.nape.FlxNapeSpace;
 class PlayState extends FlxState {
 	static var _justDied:Bool = false;
 
-	var _level:FlxNapeTilemap;
 	var _player:Player;
 	var _enemy:FlxNapeSprite;
-	var _uprightConstraint:Constraint;
-	var _exit:FlxSprite;
-	var _scoreText:FlxText;
-	var _status:FlxText;
-	var _coins:FlxGroup;
-	var ogmoLevelLoader:FlxOgmoNapeLoader;
 	var ogmoLevel:FlxNapeTilemap;
 
 	override public function create():Void {
@@ -47,38 +40,33 @@ class PlayState extends FlxState {
 		FlxNapeSpace.init();
 		FlxNapeSpace.space.gravity = new Vec2(0, 500);
 
-		ogmoLevelLoader = new FlxOgmoNapeLoader("assets/Stage.ogmo", "assets/level1.json");
+		var ogmoLevelLoader = new FlxOgmoNapeLoader("assets/Stage.ogmo", "assets/level1.json");
 		ogmoLevel = ogmoLevelLoader.loadNapeTilemap(FlxGraphic.fromAssetKey("assets/Tiles.png"), "bg");
 		ogmoLevel.setupCollideIndex(1);
 		ogmoLevel.body.setShapeMaterials(new Material(0));
-		// _level = new FlxNapeTilemap();
-		// _level.loadMapFromCSV("assets/level.csv", FlxGraphic.fromClass(GraphicAuto), 0, 0, AUTO);
-		// _level.setupCollideIndex(1);
-		// add(_level);
 		add(ogmoLevel);
 
+		ogmoLevel.follow();
+
 		// Create _player
-		_player = new Player(FlxG.width / 2 - 5, _level);
+		_player = new Player(FlxG.width / 2 - 5, ogmoLevel);
 		_player.loadGraphic("assets/walk_cycle.png", true, 48, 88);
 		_player.animation.add("walk", [for (i in 0...10) i]);
 		_player.animation.play("walk");
 		add(_player);
 
+		FlxG.camera.target = _player;
+
 		// Add enemy
-		_enemy = new BlueEnemy(_level, _player, FlxG.width / 3, 30);
+		_enemy = new BlueEnemy(ogmoLevel, _player, FlxG.width / 3, 30);
 		add(_enemy);
 
-		_uprightConstraint = new AngleJoint(_player.body, _level.body, -Math.PI / 12, Math.PI / 12, 20);
+		var _uprightConstraint = new AngleJoint(_player.body, ogmoLevel.body, -Math.PI / 12, Math.PI / 12, 20);
 		_uprightConstraint.space = FlxNapeSpace.space;
 		_uprightConstraint.debugDraw = true;
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
-
-		if (_player.y > FlxG.height) {
-			_justDied = true;
-			FlxG.resetState();
-		}
 	}
 }
