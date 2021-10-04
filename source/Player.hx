@@ -4,7 +4,7 @@ import flixel.FlxG;
 
 enum abstract PlayerConfig(Float) to Float {
 	var PLAYER_SPEED = 0.8;
-	var PLAYER_JUMP_HEIGHT = 5;
+	var PLAYER_JUMP_HEIGHT = 20;
 }
 
 class Player extends Entity {
