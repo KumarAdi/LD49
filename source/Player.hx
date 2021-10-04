@@ -16,6 +16,9 @@ class Player extends Entity {
 		setBodyMaterial(0);
 
 		this.level = level;
+
+		loadGraphic("assets/walk_cycle.png", true, 48, 88);
+		animation.add("walk", [for (i in 0...10) i], 10);
 	}
 
 	override function update(dt:Float) {

@@ -15,12 +15,16 @@ class Entity extends FlxNapeSprite {
 	}
 
 	function moveRight(speed:Float, ?level:Body) {
-		var impulse = new Vec2(body.normalImpulse(level).xy().perp().mul(speed).x, 0);
-		body.applyImpulse(impulse);
+		this.flipX = false;
+		// var impulse = new Vec2(body.normalImpulse(level).xy().perp().mul(speed).x, 0);
+		// body.applyImpulse(impulse);
+		body.velocity.x = 60;
 	}
 
 	function moveLeft(speed:Float, ?level:Body) {
-		var impulse = new Vec2(body.normalImpulse(level).xy().perp().mul(-speed).x, 0);
-		body.applyImpulse(impulse);
+		this.flipX = true;
+		// var impulse = new Vec2(body.normalImpulse(level).xy().perp().mul(-speed).x, 0);
+		// body.applyImpulse(impulse);
+		body.velocity.x = -60;
 	}
 }

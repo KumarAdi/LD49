@@ -55,8 +55,6 @@ class PlayState extends FlxState {
 
 		// Create _player
 		_player = new Player(FlxG.width / 2 - 5, ogmoLevel);
-		_player.loadGraphic("assets/walk_cycle.png", true, 48, 88);
-		_player.animation.add("walk", [for (i in 0...10) i]);
 		_player.animation.play("walk");
 		add(_player);
 
