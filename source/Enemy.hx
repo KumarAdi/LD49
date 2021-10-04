@@ -126,12 +126,11 @@ class BlueEnemy extends Enemy {
     
     public function new(tilemap: FlxNapeTilemap, player: FlxNapeSprite, x: Float, y: Float) {
         super(tilemap, player, x, y, 1, 5, 2);
-        makeGraphic(8, 8, FlxColor.BLUE);
-        createRectangularBody(8, 8);
-        setDrag(0.55);
+        makeGraphic(24, 24, FlxColor.BLUE);
+        createRectangularBody(24, 24);
+        // setDrag(0.55);
 		body.mass = 10;
 		physicsEnabled = true;
-        FlxG.watch.addMouse();
     }
 
     override function onIdle(elapsed: Float): Null<EnemyState> {

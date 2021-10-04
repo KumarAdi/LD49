@@ -1,5 +1,7 @@
 package;
 
+import flixel.FlxBasic;
+import flixel.addons.editors.ogmo.FlxOgmo3Loader.EntityData;
 import nape.constraint.Constraint;
 import nape.constraint.AngleJoint;
 import nape.phys.Material;
@@ -41,12 +43,15 @@ class PlayState extends FlxState {
 		FlxNapeSpace.space.gravity = new Vec2(0, 500);
 
 		var ogmoLevelLoader = new FlxOgmoNapeLoader("assets/Stage.ogmo", "assets/level1.json");
-		ogmoLevel = ogmoLevelLoader.loadNapeTilemap(FlxGraphic.fromAssetKey("assets/Tiles.png"), "bg");
+		ogmoLevel = ogmoLevelLoader.loadNapeTilemap(FlxGraphic.fromAssetKey("assets/Tiles.png"), "platforms");
 		ogmoLevel.setupCollideIndex(1);
 		ogmoLevel.body.setShapeMaterials(new Material(0));
 		add(ogmoLevel);
 
 		ogmoLevel.follow();
+
+		var ogmoDetails = ogmoLevelLoader.loadNapeTilemap(FlxGraphic.fromAssetKey("assets/Tiles.png"), "non-collide-details");
+		add(ogmoDetails);
 
 		// Create _player
 		_player = new Player(FlxG.width / 2 - 5, ogmoLevel);
@@ -57,13 +62,21 @@ class PlayState extends FlxState {
 
 		FlxG.camera.target = _player;
 
-		// Add enemy
-		_enemy = new BlueEnemy(ogmoLevel, _player, FlxG.width / 3, 30);
-		add(_enemy);
+		function loadEntities(entity: EntityData) {
+			switch (entity.name) {
+				case "Enemy":
+					var enemy = new BlueEnemy(ogmoLevel, _player, entity.x, entity.y);
+					add(enemy);
+			}
+		}
+		ogmoLevelLoader.loadEntities(loadEntities, "enemies");
 
 		var _uprightConstraint = new AngleJoint(_player.body, ogmoLevel.body, -Math.PI / 12, Math.PI / 12, 20);
 		_uprightConstraint.space = FlxNapeSpace.space;
 		_uprightConstraint.debugDraw = true;
+
+		// Debug stuff
+        FlxG.watch.addMouse();
 	}
 
 	override public function update(elapsed:Float):Void {
