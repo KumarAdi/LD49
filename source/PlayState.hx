@@ -3,6 +3,7 @@ package;
 import nape.constraint.Constraint;
 import nape.constraint.AngleJoint;
 import nape.phys.Material;
+import flixel.system.FlxAssets.FlxTilemapGraphicAsset;
 import Enemy.BlueEnemy;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionType;
@@ -32,6 +33,12 @@ class PlayState extends FlxState {
 	var _player:Player;
 	var _enemy:FlxNapeSprite;
 	var _uprightConstraint:Constraint;
+	var _exit:FlxSprite;
+	var _scoreText:FlxText;
+	var _status:FlxText;
+	var _coins:FlxGroup;
+	var ogmoLevelLoader:FlxOgmoNapeLoader;
+	var ogmoLevel:FlxNapeTilemap;
 
 	override public function create():Void {
 		FlxG.mouse.visible = false;
@@ -40,11 +47,15 @@ class PlayState extends FlxState {
 		FlxNapeSpace.init();
 		FlxNapeSpace.space.gravity = new Vec2(0, 500);
 
-		_level = new FlxNapeTilemap();
-		_level.loadMapFromCSV("assets/level.csv", FlxGraphic.fromClass(GraphicAuto), 0, 0, AUTO);
-		_level.setupCollideIndex(1);
-		_level.body.setShapeMaterials(new Material(0));
-		add(_level);
+		ogmoLevelLoader = new FlxOgmoNapeLoader("assets/Stage.ogmo", "assets/level1.json");
+		ogmoLevel = ogmoLevelLoader.loadNapeTilemap(FlxGraphic.fromAssetKey("assets/Tiles.png"), "bg");
+		ogmoLevel.setupCollideIndex(1);
+		ogmoLevel.body.setShapeMaterials(new Material(0));
+		// _level = new FlxNapeTilemap();
+		// _level.loadMapFromCSV("assets/level.csv", FlxGraphic.fromClass(GraphicAuto), 0, 0, AUTO);
+		// _level.setupCollideIndex(1);
+		// add(_level);
+		add(ogmoLevel);
 
 		// Create _player
 		_player = new Player(FlxG.width / 2 - 5, _level);

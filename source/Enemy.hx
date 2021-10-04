@@ -85,9 +85,10 @@ class Enemy extends FlxNapeSprite {
 		var pos = getPosition();
 		var player_pos = player.getPosition();
 
-		if (pos.distanceTo(player_pos) <= range && tilemap.ray(pos, player_pos)) {
-			return player_pos;
-		}
+        // TODO: fix tilemap ray issue
+		// if (pos.distanceTo(player_pos) <= range && tilemap.ray(pos, player_pos)) {
+		// 	return player_pos;
+		// }
 
 		return null;
 	}
